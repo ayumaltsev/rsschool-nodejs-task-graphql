@@ -52,7 +52,14 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
             id: {type: UUID},
             isMale: {type: GraphQLString},
             yearOfBirth: {type: GraphQLInt},
-            memberType: {type: MemberType}
+            memberType: {
+                type: MemberType,
+                resolve: async (profile, _, {prisma}) => {
+                    return await prisma.memberType.findUnique({
+                        where: {id: profile.memberTypeId}
+                    });
+                }
+            }
         }
     });
 
